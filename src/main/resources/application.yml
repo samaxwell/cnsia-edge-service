@@ -62,13 +62,12 @@ spring:
         - name: RequestRateLimiter
           args:
             redis-rate-limiter:
+              # Number of tokens dripped in the bucket each second
               replenishRate: 10
+              # allows request bursts of up to 20 requests
               burstCapacity: 20
+              # how many tokens a request costs
               requestedTokens: 1
-#  redis:
-#    connection-timeout: 2s
-#    port: 6379
-#    timeout: 1s
 
   data:
     redis:
