@@ -13,6 +13,9 @@ spring:
     timeout-per-shutdown-phase: 15s
   cloud:
     gateway:
+      httpclient:
+        connection-timeout: 2000 # time limit for connection to be established
+        response-timeout: 5s     # time limit for a response to be received
       routes:
         - id: catalog-route
           uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books # env var or default
