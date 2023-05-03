@@ -27,10 +27,22 @@ spring:
           uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books # env var or default
           predicates:
             - Path=/books/**
+          filters:
+            # filter name
+            - name: CircuitBreaker
+              args:
+                # circuit breaker name
+                name: catalogCircuitBreaker
+                # forwards request to this UIR when circuit is open
+                fallbackUri: forward:/catalog-fallback
         - id: order-route
           uri: ${ORDER_SERVICE_URL:http://localhost:9002}/orders
           predicates:
             - Path=/orders/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: orderCircuitBreaker
       default-filters:
         - name: Retry
           args:
@@ -46,3 +58,22 @@ spring:
               maxBackOff: 500ms
               factor: 2
               basedOnPreviousValue: false
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      # default configuration bean for all circuit breakers
+      default:
+        # size of the sliding window used to record the outcome
+        # of calls when the circuit is closed
+        slidingWindowSize: 20
+        # # of permitted calls when in half-open state
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        # wait time before moving from open to half-open (ms)
+        wait-duration-in-open-state: 15000
+  timelimiter:
+    configs:
+      default:
+        # overrides spring.cloud.gateway.httpclient.response-timeout
+        timeout-duration: 5s
