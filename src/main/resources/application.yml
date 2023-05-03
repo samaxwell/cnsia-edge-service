@@ -77,3 +77,7 @@ resilience4j:
       default:
         # overrides spring.cloud.gateway.httpclient.response-timeout
         timeout-duration: 5s
+
+logging:
+  level:
+    io.github.resilience4j: DEBUG
