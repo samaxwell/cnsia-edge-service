@@ -1,3 +1,4 @@
+message: "hello from application.yml"
 
 server:
   port: 9000
@@ -11,7 +12,19 @@ spring:
     name: edge-service
   lifecycle:
     timeout-per-shutdown-phase: 15s
+  config:
+    import: "optional:configserver:"
   cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000 # 5s
+      request-read-timeout: 5000 # 5s
+      fail-fast: false # should be true in prod
+      retry:
+        max-attempts: 6
+        initial-interval: 1000 # 1s
+        max-interval: 2000 # 2s
+        multiplier: 1.1
     gateway:
       httpclient:
         connection-timeout: 2000 # time limit for connection to be established
