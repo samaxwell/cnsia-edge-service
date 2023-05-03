@@ -31,3 +31,18 @@ spring:
           uri: ${ORDER_SERVICE_URL:http://localhost:9002}/orders
           predicates:
             - Path=/orders/**
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            # retries only when 5XX errors
+            series: SERVER_ERROR
+            # retries only when the given exceptions are thrown
+            exceptions: java.io.IOException, java.util.concurrent.TimeoutException
+            # retries with a delay computed as "firstBackoff * (factor ^ n)"
+            backoff:
+              firstBackoff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
