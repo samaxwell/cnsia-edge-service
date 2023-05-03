@@ -68,7 +68,9 @@ spring:
               burstCapacity: 20
               # how many tokens a request costs
               requestedTokens: 1
-
+        # Filter to ensure session data is saved _BEFORE_ forwarding a
+        # request downstream
+        - name: SaveSession
   data:
     redis:
       # time limit for connection to be established
@@ -77,6 +79,12 @@ spring:
       port: 6379
       # time limit for response to be received
       timeout: 1s
+
+  session:
+    store-type: redis
+    timeout: 10m
+    redis:
+      namespace: polar:edge
 
 resilience4j:
   circuitbreaker:
