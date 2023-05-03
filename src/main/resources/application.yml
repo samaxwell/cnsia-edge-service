@@ -16,6 +16,12 @@ spring:
       httpclient:
         connection-timeout: 2000 # time limit for connection to be established
         response-timeout: 5s     # time limit for a response to be received
+        pool:
+          type: elastic # default. Could be 'fixed'
+          # idle time after which the communication channel will be closed
+          max-idle-time: 15s
+          # time after which the communication channel will be closed
+          max-life-time: 60s
       routes:
         - id: catalog-route
           uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books # env var or default
