@@ -81,6 +81,7 @@ spring:
       timeout: 1s
 
   session:
+    # For testing, store-type can be set to none, meaning Redis isn't required
     store-type: redis
     timeout: 10m
     redis:
